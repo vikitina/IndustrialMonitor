@@ -1,0 +1,98 @@
+
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Page heading -->
+  <Style Selector="TextBlock.page-title">
+    <Setter Property="FontSize" Value="28"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Foreground"
+            Value="{DynamicResource PrimaryTextBrush}"/>
+  </Style>
+
+  <!-- Section heading -->
+  <Style Selector="TextBlock.section-title">
+    <Setter Property="FontSize" Value="20"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Foreground"
+            Value="{DynamicResource PrimaryTextBrush}"/>
+  </Style>
+
+  <!-- Secondary text -->
+  <Style Selector="TextBlock.muted">
+    <Setter Property="Foreground"
+            Value="{DynamicResource SecondaryTextBrush}"/>
+  </Style>
+
+  <!-- KPI value -->
+  <Style Selector="TextBlock.kpi-value">
+    <Setter Property="FontSize" Value="32"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Foreground"
+            Value="{DynamicResource PrimaryTextBrush}"/>
+  </Style>
+
+  <!-- Reusable card -->
+  <Style Selector="Border.card">
+    <Setter Property="Background"
+            Value="{DynamicResource CardBrush}"/>
+    <Setter Property="CornerRadius" Value="12"/>
+    <Setter Property="Padding" Value="20"/>
+  </Style>
+
+  <!-- Sidebar navigation -->
+  <Style Selector="Button.nav-button">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground"
+            Value="{DynamicResource SecondaryTextBrush}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="Padding" Value="12"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+
+  <Style Selector="Button.nav-button:pointerover">
+    <Setter Property="Background"
+            Value="{DynamicResource SelectedBrush}"/>
+  </Style>
+
+  <Style Selector="Button.nav-button.active">
+    <Setter Property="Background"
+            Value="{DynamicResource SelectedBrush}"/>
+    <Setter Property="Foreground"
+            Value="{DynamicResource PrimaryTextBrush}"/>
+  </Style>
+
+  <!-- Theme button -->
+  <Style Selector="Button.theme-button">
+    <Setter Property="Background"
+            Value="{DynamicResource CardBrush}"/>
+    <Setter Property="Foreground"
+            Value="{DynamicResource PrimaryTextBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="14,10"/>
+  </Style>
+
+  <!-- Equipment status -->
+  <Style Selector="TextBlock.status-running">
+    <Setter Property="Foreground"
+            Value="{DynamicResource SuccessBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.status-warning">
+    <Setter Property="Foreground"
+            Value="{DynamicResource WarningBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.status-critical">
+    <Setter Property="Foreground"
+            Value="{DynamicResource CriticalBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.status-stopped">
+    <Setter Property="Foreground"
+            Value="{DynamicResource SecondaryTextBrush}"/>
+  </Style>
+
+</Styles>

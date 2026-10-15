@@ -1,0 +1,5 @@
+﻿<Solution>
+  <Project Path="IndustrialMonitor/IndustrialMonitor.csproj" />
+  <Project Path="IndustrialMonitor.Desktop/IndustrialMonitor.Desktop.csproj" />
+  <Project Path="IndustrialMonitor.Browser/IndustrialMonitor.Browser.csproj" />
+</Solution>

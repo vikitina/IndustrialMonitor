@@ -1,0 +1,33 @@
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="IndustrialMonitor.Views.TemperatureChartView">
+
+  <Border Classes="card">
+    <StackPanel Spacing="16">
+
+      <TextBlock Text="Temperature History"
+                 Classes="section-title"/>
+
+      <Grid Height="220">
+
+        <Canvas Name="ChartCanvas"
+                ClipToBounds="True"
+                SizeChanged="ChartCanvas_SizeChanged">
+
+          <Polyline Name="TemperatureLine"
+                    Stroke="{DynamicResource AccentBrush}"
+                    StrokeThickness="2.5"
+                    StrokeJoin="Round"/>
+
+        </Canvas>
+
+      </Grid>
+
+      <TextBlock Text="Last 30 measurements"
+                 Classes="muted"
+                 FontSize="12"/>
+
+    </StackPanel>
+  </Border>
+</UserControl>

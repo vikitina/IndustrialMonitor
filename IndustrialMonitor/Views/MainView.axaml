@@ -1,0 +1,233 @@
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:IndustrialMonitor.ViewModels"
+             xmlns:models="using:IndustrialMonitor.Models"
+             xmlns:converters="using:IndustrialMonitor.Converters"
+             xmlns:views="using:IndustrialMonitor.Views"
+             x:Class="IndustrialMonitor.Views.MainView"
+             x:DataType="vm:MainViewModel"
+             Background="{DynamicResource AppBackgroundBrush}">
+
+  <UserControl.Resources>
+    <converters:EquipmentStatusBrushConverter
+      x:Key="StatusBrushConverter"/>
+  </UserControl.Resources>
+
+  <Grid ColumnDefinitions="220,*">
+
+    <!-- SIDEBAR -->
+    <Border Grid.Column="0"
+            Background="{DynamicResource SidebarBrush}"
+            Padding="20">
+      <StackPanel Spacing="24">
+
+        <StackPanel Spacing="4">
+          <TextBlock Text="INDUSTRIAL"
+                     FontSize="19"
+                     FontWeight="Bold"
+                     Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+          <TextBlock Text="MONITOR"
+                     FontSize="12"
+                     Foreground="{DynamicResource AccentBrush}"/>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+          <Button Classes="nav-button active"
+                  Content="Dashboard"/>
+          <Button Classes="nav-button"
+                  Content="Equipment"/>
+          <Button Classes="nav-button"
+                  Content="Alerts"/>
+          <Button Classes="nav-button"
+                  Content="Settings"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- MAIN CONTENT -->
+    <ScrollViewer Grid.Column="1">
+      <StackPanel Margin="28" Spacing="24">
+
+        <!-- HEADER -->
+        <Grid ColumnDefinitions="*,Auto,Auto"
+              ColumnSpacing="12">
+
+          <StackPanel Spacing="6">
+            <TextBlock Classes="page-title"
+                       Text="Equipment Overview"/>
+            <TextBlock Classes="muted"
+                       Text="Real-time industrial monitoring"/>
+          </StackPanel>
+
+          <Border Grid.Column="1"
+                  Background="{DynamicResource OnlineBackgroundBrush}"
+                  CornerRadius="8"
+                  Padding="14,8"
+                  VerticalAlignment="Center">
+            <TextBlock Text="● SYSTEM ONLINE"
+                       Foreground="{DynamicResource SuccessBrush}"/>
+          </Border>
+
+          <Button Grid.Column="2"
+                  Classes="theme-button"
+                  VerticalAlignment="Center"
+                  Command="{Binding ToggleThemeCommand}"
+                  Content="{Binding ThemeButtonText}"/>
+        </Grid>
+
+
+        <!-- LIVE SIMULATION CONTROLS -->
+        <Border Classes="card">
+          <Grid ColumnDefinitions="*,Auto"
+                ColumnSpacing="20">
+
+            <StackPanel Spacing="8">
+              <TextBlock Text="{Binding SimulationStatusText}"
+                         Foreground="{DynamicResource AccentBrush}"
+                         FontWeight="SemiBold"/>
+
+              <TextBlock Text="{Binding LastUpdatedText}"
+                         Classes="muted"/>
+            </StackPanel>
+
+            <Button Grid.Column="1"
+                    Classes="theme-button"
+                    VerticalAlignment="Center"
+                    Content="{Binding SimulationButtonText}"
+                    Command="{Binding ToggleSimulationCommand}"/>
+
+          </Grid>
+        </Border>
+
+        <!-- KPI CARDS -->
+        <Grid ColumnDefinitions="*,*,*,*"
+              ColumnSpacing="14">
+
+          <Border Grid.Column="0" Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="muted"
+                         Text="Total Equipment"/>
+              <TextBlock Classes="kpi-value"
+                         Text="{Binding TotalEquipment}"/>
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Column="1" Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="muted"
+                         Text="Running"/>
+              <TextBlock Classes="kpi-value"
+                         Foreground="{DynamicResource SuccessBrush}"
+                         Text="{Binding RunningEquipment}"/>
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Column="2" Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="muted"
+                         Text="Warnings"/>
+              <TextBlock Classes="kpi-value"
+                         Foreground="{DynamicResource WarningBrush}"
+                         Text="{Binding WarningEquipment}"/>
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Column="3" Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="muted"
+                         Text="Critical"/>
+              <TextBlock Classes="kpi-value"
+                         Foreground="{DynamicResource CriticalBrush}"
+                         Text="{Binding CriticalEquipment}"/>
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <!-- EQUIPMENT LIST -->
+        <Border Classes="card">
+          <StackPanel Spacing="18">
+
+            <TextBlock Classes="section-title"
+                       Text="Equipment Status"/>
+
+            <ListBox ItemsSource="{Binding EquipmentItems}"
+                     SelectedItem="{Binding SelectedEquipment, Mode=TwoWay}"
+                     Background="Transparent"
+                     BorderThickness="0">
+
+              <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="models:Equipment">
+
+                  <Grid ColumnDefinitions="2*,Auto,Auto,Auto"
+                        ColumnSpacing="18"
+                        Margin="0,8">
+
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Name}"
+                               Foreground="{DynamicResource PrimaryTextBrush}"
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding TemperatureText}"
+                               Foreground="{DynamicResource SecondaryTextBrush}"
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding PressureText}"
+                               Foreground="{DynamicResource SecondaryTextBrush}"
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Grid.Column="3"
+                               Text="{Binding StatusText}"
+                               Foreground="{Binding Status, Converter={StaticResource StatusBrushConverter}}"
+                               VerticalAlignment="Center"/>
+
+                  </Grid>
+
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+
+            </ListBox>
+          </StackPanel>
+        </Border>
+
+        <!-- SELECTED EQUIPMENT DETAILS -->
+        <views:EquipmentDetailsView
+          DataContext="{Binding SelectedEquipment}"/>
+
+        <!-- EQUIPMENT CONTROLS -->
+        <Border Classes="card">
+          <StackPanel Spacing="16">
+
+            <TextBlock Classes="section-title"
+                       Text="Equipment Controls"/>
+
+            <TextBlock Text="{Binding SelectedEquipment.Name, FallbackValue='Select equipment'}"
+                       Foreground="{DynamicResource PrimaryTextBrush}"
+                       FontSize="16"/>
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="12">
+
+              <Button Content="Start"
+                      Command="{Binding StartEquipmentCommand}"/>
+
+              <Button Content="Stop"
+                      Command="{Binding StopEquipmentCommand}"/>
+
+              <Button Content="Warning"
+                      Command="{Binding SetWarningCommand}"/>
+
+              <Button Content="Critical"
+                      Command="{Binding SetCriticalCommand}"/>
+
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

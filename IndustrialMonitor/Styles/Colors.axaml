@@ -1,0 +1,43 @@
+
+<ResourceDictionary xmlns="https://github.com/avaloniaui" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.ThemeDictionaries>
+
+    <!-- DARK THEME -->
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="AppBackgroundBrush" Color="#0B1220"/>
+      <SolidColorBrush x:Key="SidebarBrush" Color="#111C2E"/>
+      <SolidColorBrush x:Key="CardBrush" Color="#172338"/>
+      <SolidColorBrush x:Key="SelectedBrush" Color="#1E3A5F"/>
+
+      <SolidColorBrush x:Key="PrimaryTextBrush" Color="#F8FAFC"/>
+      <SolidColorBrush x:Key="SecondaryTextBrush" Color="#94A3B8"/>
+      <SolidColorBrush x:Key="DividerBrush" Color="#334155"/>
+
+      <SolidColorBrush x:Key="OnlineBackgroundBrush" Color="#153C35"/>
+    </ResourceDictionary>
+
+    <!-- LIGHT THEME -->
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="AppBackgroundBrush" Color="#F1F5F9"/>
+      <SolidColorBrush x:Key="SidebarBrush" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
+      <SolidColorBrush x:Key="SelectedBrush" Color="#DBEAFE"/>
+
+      <SolidColorBrush x:Key="PrimaryTextBrush" Color="#0F172A"/>
+      <SolidColorBrush x:Key="SecondaryTextBrush" Color="#64748B"/>
+      <SolidColorBrush x:Key="DividerBrush" Color="#E2E8F0"/>
+
+      <SolidColorBrush x:Key="OnlineBackgroundBrush" Color="#DCFCE7"/>
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+  <!-- Semantic status colors -->
+  <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E"/>
+  <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/>
+  <SolidColorBrush x:Key="CriticalBrush" Color="#F43F5E"/>
+  <SolidColorBrush x:Key="AccentBrush" Color="#0EA5E9"/>
+
+</ResourceDictionary>

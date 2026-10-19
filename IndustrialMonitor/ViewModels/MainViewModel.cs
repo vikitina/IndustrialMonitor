@@ -6,6 +6,8 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.Controls;
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using IndustrialMonitor.Models;
@@ -20,6 +22,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
   public ObservableCollection<Equipment> EquipmentItems { get; }
 
+  public EquipmentListViewModel EquipmentList { get; }
+
   [ObservableProperty]
   private Equipment? _selectedEquipment;
 
@@ -31,6 +35,65 @@ public partial class MainViewModel : ViewModelBase, IDisposable
 
   [ObservableProperty]
   private DateTime _lastUpdated = DateTime.Now;
+
+
+  [ObservableProperty]
+  private string _currentPage = "Dashboard";
+
+  public bool IsDashboardPage => CurrentPage == "Dashboard";
+
+  public bool IsEquipmentPage => CurrentPage == "Equipment";
+
+
+  [ObservableProperty]
+  private bool _isCompactLayout;
+
+  public GridLength SidebarColumnWidth =>
+      IsCompactLayout
+          ? new GridLength(64)
+          : new GridLength(220);
+
+  public bool IsExpandedLayout => !IsCompactLayout;
+
+  public Thickness SidebarPadding =>
+      IsCompactLayout
+          ? new Thickness(10, 20)
+          : new Thickness(16, 20);
+
+  public double NavButtonWidth =>
+      IsCompactLayout ? 44 : double.NaN;
+
+  public double NavButtonHeight => 44;
+
+  public HorizontalAlignment SidebarItemsAlignment =>
+      IsCompactLayout
+          ? HorizontalAlignment.Center
+          : HorizontalAlignment.Stretch;
+
+  partial void OnIsCompactLayoutChanged(bool value)
+  {
+    OnPropertyChanged(nameof(SidebarColumnWidth));
+    OnPropertyChanged(nameof(IsExpandedLayout));
+    OnPropertyChanged(nameof(SidebarPadding));
+    OnPropertyChanged(nameof(NavButtonWidth));
+    OnPropertyChanged(nameof(SidebarItemsAlignment));
+  }
+
+  partial void OnCurrentPageChanged(string value)
+  {
+    OnPropertyChanged(nameof(IsDashboardPage));
+    OnPropertyChanged(nameof(IsEquipmentPage));
+  }
+
+  [RelayCommand]
+  private void Navigate(string page)
+  {
+    if (page is "Dashboard" or "Equipment")
+    {
+      CurrentPage = page;
+    }
+  }
+
 
   public int TotalEquipment => EquipmentItems.Count;
 
@@ -58,6 +121,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
   public string LastUpdatedText =>
       $"Last updated: {LastUpdated:HH:mm:ss}";
 
+
+
   public MainViewModel()
   {
     var equipmentService = new EquipmentService();
@@ -66,6 +131,8 @@ public partial class MainViewModel : ViewModelBase, IDisposable
     EquipmentItems = new ObservableCollection<Equipment>(
         equipmentService.GetEquipment()
     );
+
+    EquipmentList = new EquipmentListViewModel(EquipmentItems);
 
     foreach (var equipment in EquipmentItems)
     {
@@ -226,6 +293,9 @@ public partial class MainViewModel : ViewModelBase, IDisposable
       equipment.PropertyChanged -= Equipment_PropertyChanged;
     }
 
+    EquipmentList.Dispose();
+
     GC.SuppressFinalize(this);
   }
+
 }

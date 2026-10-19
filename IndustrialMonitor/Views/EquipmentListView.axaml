@@ -1,0 +1,161 @@
+
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:IndustrialMonitor.ViewModels"
+             xmlns:models="using:IndustrialMonitor.Models"
+             xmlns:converters="using:IndustrialMonitor.Converters"
+             x:Class="IndustrialMonitor.Views.EquipmentListView"
+             x:DataType="vm:EquipmentListViewModel">
+
+  <UserControl.Resources>
+    <converters:EquipmentStatusBrushConverter
+      x:Key="StatusBrushConverter"/>
+  </UserControl.Resources>
+
+  <Border Classes="card">
+    <StackPanel Spacing="18">
+
+      <!-- TITLE -->
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Spacing="4">
+          <TextBlock Text="Equipment"
+                     Classes="section-title"/>
+
+          <TextBlock Text="Equipment inventory and live readings"
+                     Classes="muted"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    Spacing="6">
+          <TextBlock Text="{Binding VisibleCount}"
+                     Foreground="{DynamicResource PrimaryTextBrush}"
+                     FontWeight="Bold"/>
+
+          <TextBlock Text="devices"
+                     Classes="muted"/>
+        </StackPanel>
+      </Grid>
+
+      <!-- FILTERS: WRAPS ON NARROW WIDTHS -->
+      <WrapPanel Orientation="Horizontal"
+                 ItemSpacing="12"
+                 LineSpacing="12">
+
+        <StackPanel Spacing="5"
+                    Width="220">
+          <TextBlock Text="Search"
+                     Classes="muted"/>
+
+          <TextBox PlaceholderText="Name or ID..."
+                   Text="{Binding SearchText, Mode=TwoWay,
+                   UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <StackPanel Spacing="5"
+                    Width="150">
+          <TextBlock Text="Status"
+                     Classes="muted"/>
+
+          <ComboBox ItemsSource="{Binding StatusOptions}"
+                    SelectedItem="{Binding SelectedStatus,
+                    Mode=TwoWay}"
+                    HorizontalAlignment="Stretch"/>
+        </StackPanel>
+
+        <StackPanel Spacing="5"
+                    Width="150">
+          <TextBlock Text="Sort by"
+                     Classes="muted"/>
+
+          <ComboBox ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSort,
+                    Mode=TwoWay}"
+                    HorizontalAlignment="Stretch"/>
+        </StackPanel>
+
+        <StackPanel Spacing="5">
+          <TextBlock Text="Order"
+                     Classes="muted"/>
+
+          <CheckBox Content="Descending"
+                    IsChecked="{Binding SortDescending,
+                    Mode=TwoWay}"
+                    VerticalAlignment="Center"/>
+        </StackPanel>
+      </WrapPanel>
+
+      <!-- TABLE HEADER AND ROWS -->
+      <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Disabled">
+
+        <StackPanel MinWidth="650"
+                    Spacing="6">
+
+          <Grid ColumnDefinitions="2*,*,*,*"
+                ColumnSpacing="16"
+                Margin="12,0,12,8">
+
+            <TextBlock Text="NAME" Classes="muted"/>
+            <TextBlock Grid.Column="1"
+                       Text="STATUS" Classes="muted"/>
+            <TextBlock Grid.Column="2"
+                       Text="TEMPERATURE" Classes="muted"/>
+            <TextBlock Grid.Column="3"
+                       Text="PRESSURE" Classes="muted"/>
+          </Grid>
+
+          <ListBox ItemsSource="{Binding FilteredEquipment}"
+                   SelectedItem="{Binding SelectedEquipment, Mode=TwoWay}">
+
+            <ListBox.Styles>
+              <Style Selector="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Stretch"/>
+              </Style>
+            </ListBox.Styles>
+
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="models:Equipment">
+
+                <Grid ColumnDefinitions="2*,*,*,*"
+                      ColumnSpacing="16"
+                      Margin="8"
+                      MinHeight="36">
+
+                  <TextBlock Text="{Binding Name}"
+                             VerticalAlignment="Center"
+                             TextTrimming="CharacterEllipsis"/>
+
+                  <TextBlock Grid.Column="1"
+                             Text="{Binding StatusText}"
+                             Foreground="{Binding Status,
+                             Converter={StaticResource StatusBrushConverter}}"
+                             VerticalAlignment="Center"
+                             FontWeight="SemiBold"/>
+
+                  <TextBlock Grid.Column="2"
+                             Text="{Binding TemperatureText}"
+                             VerticalAlignment="Center"/>
+
+                  <TextBlock Grid.Column="3"
+                             Text="{Binding PressureText}"
+                             VerticalAlignment="Center"/>
+                </Grid>
+
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+
+          </ListBox>
+
+          <TextBlock Text="No equipment matches your filters."
+                     Classes="muted"
+                     Margin="12"
+                     IsVisible="{Binding !FilteredEquipment.Count}"/>
+
+        </StackPanel>
+      </ScrollViewer>
+
+    </StackPanel>
+  </Border>
+</UserControl>

@@ -2,232 +2,323 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:IndustrialMonitor.ViewModels"
-             xmlns:models="using:IndustrialMonitor.Models"
-             xmlns:converters="using:IndustrialMonitor.Converters"
              xmlns:views="using:IndustrialMonitor.Views"
              x:Class="IndustrialMonitor.Views.MainView"
              x:DataType="vm:MainViewModel"
              Background="{DynamicResource AppBackgroundBrush}">
 
-  <UserControl.Resources>
-    <converters:EquipmentStatusBrushConverter
-      x:Key="StatusBrushConverter"/>
-  </UserControl.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="{Binding SidebarColumnWidth}"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
 
-  <Grid ColumnDefinitions="220,*">
+    <!-- SIDEBAR -->
 
     <!-- SIDEBAR -->
     <Border Grid.Column="0"
             Background="{DynamicResource SidebarBrush}"
-            Padding="20">
-      <StackPanel Spacing="24">
+            Padding="{Binding SidebarPadding}">
 
-        <StackPanel Spacing="4">
-          <TextBlock Text="INDUSTRIAL"
-                     FontSize="19"
-                     FontWeight="Bold"
-                     Foreground="{DynamicResource PrimaryTextBrush}"/>
+      <StackPanel Spacing="24"
+                  HorizontalAlignment="Stretch">
 
-          <TextBlock Text="MONITOR"
-                     FontSize="12"
-                     Foreground="{DynamicResource AccentBrush}"/>
+
+        <!-- BRAND -->
+        <StackPanel Orientation="Horizontal"
+                    Spacing="8"
+                    HorizontalAlignment="Left">
+
+          <Border Width="44"
+                  Height="44"
+                  CornerRadius="10"
+                  Background="{DynamicResource OnlineBackgroundBrush}">
+
+            <TextBlock Text="IM"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource AccentBrush}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+          </Border>
+
+          <StackPanel Spacing="3"
+                      VerticalAlignment="Center"
+                      IsVisible="{Binding IsExpandedLayout}">
+
+            <TextBlock Text="INDUSTRIAL"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+
+            <TextBlock Text="MONITOR"
+                       FontSize="11"
+                       Foreground="{DynamicResource AccentBrush}"/>
+
+          </StackPanel>
+
         </StackPanel>
 
-        <StackPanel Spacing="8">
-          <Button Classes="nav-button active"
-                  Content="Dashboard"/>
+
+        <!-- NAVIGATION -->
+        <StackPanel Spacing="8"
+                    HorizontalAlignment="Stretch">
+
+          <!-- DASHBOARD -->
           <Button Classes="nav-button"
-                  Content="Equipment"/>
+                  Classes.active="{Binding IsDashboardPage}"
+                  Command="{Binding NavigateCommand}"
+                  CommandParameter="Dashboard"
+                  Width="{Binding NavButtonWidth}"
+                  Height="{Binding NavButtonHeight}"
+                  HorizontalAlignment="{Binding SidebarItemsAlignment}"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Center"
+                  Padding="0"
+                  ToolTip.Tip="Dashboard">
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="{Binding SidebarItemsAlignment}">
+              <!-- Icon slot -->
+              <Grid Width="44"
+                    Height="44">
+
+                <Path Grid.Column="0"
+                      Width="18"
+                      Height="18"
+                      Stretch="Uniform"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Fill="{DynamicResource PrimaryTextBrush}"
+                      Data="M3,3 H10 V10 H3 Z M14,3 H21 V10 H14 Z M3,14 H10 V21 H3 Z M14,14 H21 V21 H14 Z"/>
+              </Grid>
+              <TextBlock Grid.Column="1"
+                         Text="Dashboard"
+                         VerticalAlignment="Center"
+                         IsVisible="{Binding IsExpandedLayout}"/>
+
+            </StackPanel>
+
+          </Button>
+
+          <!-- EQUIPMENT -->
           <Button Classes="nav-button"
-                  Content="Alerts"/>
+                  Classes.active="{Binding IsEquipmentPage}"
+                  Command="{Binding NavigateCommand}"
+                  CommandParameter="Equipment"
+                  Width="{Binding NavButtonWidth}"
+                  Height="{Binding NavButtonHeight}"
+                  HorizontalAlignment="{Binding SidebarItemsAlignment}"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Center"
+                  Padding="0"
+                  ToolTip.Tip="Equipment">
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="{Binding SidebarItemsAlignment}">
+              <!-- Icon slot -->
+              <Grid Width="44"
+                    Height="44">
+
+                <Path Grid.Column="0"
+                      Width="18"
+                      Height="18"
+                      Stretch="Uniform"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Fill="{DynamicResource PrimaryTextBrush}"
+                      Data="M4,5 H7 V8 H4 Z M10,5 H21 V8 H10 Z M4,11 H7 V14 H4 Z M10,11 H21 V14 H10 Z M4,17 H7 V20 H4 Z M10,17 H21 V20 H10 Z"/>
+              </Grid>
+              <TextBlock Grid.Column="1"
+                         Text="Equipment"
+                         VerticalAlignment="Center"
+                         IsVisible="{Binding IsExpandedLayout}"/>
+
+            </StackPanel>
+
+          </Button>
+
+          <!-- ALERTS: future page -->
           <Button Classes="nav-button"
-                  Content="Settings"/>
+                  IsEnabled="False"
+                  Width="{Binding NavButtonWidth}"
+                  Height="{Binding NavButtonHeight}"
+                  HorizontalAlignment="{Binding SidebarItemsAlignment}"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Center"
+                  Padding="0"
+                  ToolTip.Tip="Alerts">
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="{Binding SidebarItemsAlignment}">
+              <!-- Icon slot -->
+              <Grid Width="44"
+                    Height="44">
+                <Path Grid.Column="0"
+                      Width="18"
+                      Height="18"
+                      Stretch="Uniform"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Fill="{DynamicResource SecondaryTextBrush}"
+                      Data="M12,2 C8,2 5,5 5,9 V15 L3,18 H21 L19,15 V9 C19,5 16,2 12,2 Z M10,21 H14"/>
+              </Grid>
+              <TextBlock Grid.Column="1"
+                         Text="Alerts"
+                         VerticalAlignment="Center"
+                         IsVisible="{Binding IsExpandedLayout}"/>
+
+            </StackPanel>
+
+          </Button>
+
+          <!-- SETTINGS: future page -->
+          <Button Classes="nav-button"
+                  IsEnabled="False"
+                  Width="{Binding NavButtonWidth}"
+                  Height="{Binding NavButtonHeight}"
+                  HorizontalAlignment="{Binding SidebarItemsAlignment}"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Center"
+                  Padding="0"
+                  ToolTip.Tip="Settings">
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8"
+                        HorizontalAlignment="{Binding SidebarItemsAlignment}">
+              <!-- Icon slot -->
+              <Grid Width="44"
+                    Height="44">
+                <Path Grid.Column="0"
+                      Width="18"
+                      Height="18"
+                      Stretch="Uniform"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Fill="{DynamicResource SecondaryTextBrush}"
+                      Data="M4,6 H20 V8 H4 Z M4,12 H20 V14 H4 Z M4,18 H20 V20 H4 Z"/>
+              </Grid>
+              <TextBlock Grid.Column="1"
+                         Text="Settings"
+                         VerticalAlignment="Center"
+                         IsVisible="{Binding IsExpandedLayout}"/>
+
+            </StackPanel>
+
+          </Button>
+
         </StackPanel>
+
       </StackPanel>
     </Border>
 
+
     <!-- MAIN CONTENT -->
-    <ScrollViewer Grid.Column="1">
-      <StackPanel Margin="28" Spacing="24">
+    <ScrollViewer Grid.Column="1"
+                  HorizontalScrollBarVisibility="Disabled"
+                  VerticalScrollBarVisibility="Auto">
+
+      <StackPanel Margin="28"
+                  Spacing="24">
+
 
         <!-- HEADER -->
-        <Grid ColumnDefinitions="*,Auto,Auto"
-              ColumnSpacing="12">
+        <Grid>
 
-          <StackPanel Spacing="6">
-            <TextBlock Classes="page-title"
-                       Text="Equipment Overview"/>
-            <TextBlock Classes="muted"
-                       Text="Real-time industrial monitoring"/>
-          </StackPanel>
+          <!-- WIDE HEADER -->
+          <Grid x:Name="WideHeader"
+                ColumnDefinitions="*,Auto,Auto"
+                ColumnSpacing="12">
 
-          <Border Grid.Column="1"
-                  Background="{DynamicResource OnlineBackgroundBrush}"
-                  CornerRadius="8"
-                  Padding="14,8"
-                  VerticalAlignment="Center">
-            <TextBlock Text="● SYSTEM ONLINE"
-                       Foreground="{DynamicResource SuccessBrush}"/>
-          </Border>
+            <StackPanel Grid.Column="0"
+                        Spacing="6">
+              <TextBlock Classes="page-title"
+                         Text="Industrial Monitor"/>
 
-          <Button Grid.Column="2"
-                  Classes="theme-button"
-                  VerticalAlignment="Center"
-                  Command="{Binding ToggleThemeCommand}"
-                  Content="{Binding ThemeButtonText}"/>
-        </Grid>
-
-
-        <!-- LIVE SIMULATION CONTROLS -->
-        <Border Classes="card">
-          <Grid ColumnDefinitions="*,Auto"
-                ColumnSpacing="20">
-
-            <StackPanel Spacing="8">
-              <TextBlock Text="{Binding SimulationStatusText}"
-                         Foreground="{DynamicResource AccentBrush}"
-                         FontWeight="SemiBold"/>
-
-              <TextBlock Text="{Binding LastUpdatedText}"
-                         Classes="muted"/>
+              <TextBlock Classes="muted"
+                         Text="Real-time industrial monitoring"/>
             </StackPanel>
 
-            <Button Grid.Column="1"
+            <Border Grid.Column="1"
+                    Background="{DynamicResource OnlineBackgroundBrush}"
+                    CornerRadius="8"
+                    Padding="14,8"
+                    VerticalAlignment="Center">
+
+              <TextBlock Text="● SYSTEM ONLINE"
+                         Foreground="{DynamicResource SuccessBrush}"/>
+            </Border>
+
+            <Button Grid.Column="2"
                     Classes="theme-button"
                     VerticalAlignment="Center"
-                    Content="{Binding SimulationButtonText}"
-                    Command="{Binding ToggleSimulationCommand}"/>
+                    Command="{Binding ToggleThemeCommand}"
+                    Content="{Binding ThemeButtonText}"/>
 
           </Grid>
-        </Border>
 
-        <!-- KPI CARDS -->
-        <Grid ColumnDefinitions="*,*,*,*"
-              ColumnSpacing="14">
+          <!-- COMPACT HEADER -->
+          <StackPanel x:Name="CompactHeader"
+                      Spacing="14"
+                      IsVisible="False">
 
-          <Border Grid.Column="0" Classes="card">
-            <StackPanel Spacing="12">
+            <StackPanel Spacing="6">
+              <TextBlock Classes="page-title"
+                         Text="Industrial Monitor"/>
+
               <TextBlock Classes="muted"
-                         Text="Total Equipment"/>
-              <TextBlock Classes="kpi-value"
-                         Text="{Binding TotalEquipment}"/>
+                         Text="Real-time industrial monitoring"/>
             </StackPanel>
-          </Border>
 
-          <Border Grid.Column="1" Classes="card">
-            <StackPanel Spacing="12">
-              <TextBlock Classes="muted"
-                         Text="Running"/>
-              <TextBlock Classes="kpi-value"
-                         Foreground="{DynamicResource SuccessBrush}"
-                         Text="{Binding RunningEquipment}"/>
-            </StackPanel>
-          </Border>
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="12">
 
-          <Border Grid.Column="2" Classes="card">
-            <StackPanel Spacing="12">
-              <TextBlock Classes="muted"
-                         Text="Warnings"/>
-              <TextBlock Classes="kpi-value"
-                         Foreground="{DynamicResource WarningBrush}"
-                         Text="{Binding WarningEquipment}"/>
-            </StackPanel>
-          </Border>
+              <Border Grid.Column="0"
+                      Background="{DynamicResource OnlineBackgroundBrush}"
+                      CornerRadius="8"
+                      Padding="14,8"
+                      HorizontalAlignment="Left">
 
-          <Border Grid.Column="3" Classes="card">
-            <StackPanel Spacing="12">
-              <TextBlock Classes="muted"
-                         Text="Critical"/>
-              <TextBlock Classes="kpi-value"
-                         Foreground="{DynamicResource CriticalBrush}"
-                         Text="{Binding CriticalEquipment}"/>
-            </StackPanel>
-          </Border>
+                <TextBlock Text="● ONLINE"
+                           Foreground="{DynamicResource SuccessBrush}"/>
+              </Border>
+
+              <Button Grid.Column="1"
+                      Classes="theme-button"
+                      Command="{Binding ToggleThemeCommand}"
+                      Content="{Binding ThemeButtonText}"/>
+
+            </Grid>
+
+          </StackPanel>
+
         </Grid>
 
-        <!-- EQUIPMENT LIST -->
-        <Border Classes="card">
-          <StackPanel Spacing="18">
 
-            <TextBlock Classes="section-title"
-                       Text="Equipment Status"/>
 
-            <ListBox ItemsSource="{Binding EquipmentItems}"
-                     SelectedItem="{Binding SelectedEquipment, Mode=TwoWay}"
-                     Background="Transparent"
-                     BorderThickness="0">
+        <!-- PAGE CONTENT -->
+        <Grid>
 
-              <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="models:Equipment">
+          <!-- DASHBOARD -->
+          <Grid IsVisible="{Binding IsDashboardPage}">
+            <views:DashboardView
+              DataContext="{Binding}"/>
+          </Grid>
 
-                  <Grid ColumnDefinitions="2*,Auto,Auto,Auto"
-                        ColumnSpacing="18"
-                        Margin="0,8">
+          <!-- EQUIPMENT -->
+          <Grid IsVisible="{Binding IsEquipmentPage}">
+            <views:EquipmentListView
+              DataContext="{Binding EquipmentList}"/>
+          </Grid>
 
-                    <TextBlock Grid.Column="0"
-                               Text="{Binding Name}"
-                               Foreground="{DynamicResource PrimaryTextBrush}"
-                               VerticalAlignment="Center"/>
+        </Grid>
 
-                    <TextBlock Grid.Column="1"
-                               Text="{Binding TemperatureText}"
-                               Foreground="{DynamicResource SecondaryTextBrush}"
-                               VerticalAlignment="Center"/>
-
-                    <TextBlock Grid.Column="2"
-                               Text="{Binding PressureText}"
-                               Foreground="{DynamicResource SecondaryTextBrush}"
-                               VerticalAlignment="Center"/>
-
-                    <TextBlock Grid.Column="3"
-                               Text="{Binding StatusText}"
-                               Foreground="{Binding Status, Converter={StaticResource StatusBrushConverter}}"
-                               VerticalAlignment="Center"/>
-
-                  </Grid>
-
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-
-            </ListBox>
-          </StackPanel>
-        </Border>
-
-        <!-- SELECTED EQUIPMENT DETAILS -->
-        <views:EquipmentDetailsView
-          DataContext="{Binding SelectedEquipment}"/>
-
-        <!-- EQUIPMENT CONTROLS -->
-        <Border Classes="card">
-          <StackPanel Spacing="16">
-
-            <TextBlock Classes="section-title"
-                       Text="Equipment Controls"/>
-
-            <TextBlock Text="{Binding SelectedEquipment.Name, FallbackValue='Select equipment'}"
-                       Foreground="{DynamicResource PrimaryTextBrush}"
-                       FontSize="16"/>
-
-            <StackPanel Orientation="Horizontal"
-                        Spacing="12">
-
-              <Button Content="Start"
-                      Command="{Binding StartEquipmentCommand}"/>
-
-              <Button Content="Stop"
-                      Command="{Binding StopEquipmentCommand}"/>
-
-              <Button Content="Warning"
-                      Command="{Binding SetWarningCommand}"/>
-
-              <Button Content="Critical"
-                      Command="{Binding SetCriticalCommand}"/>
-
-            </StackPanel>
-          </StackPanel>
-        </Border>
 
       </StackPanel>
     </ScrollViewer>
+
   </Grid>
 </UserControl>

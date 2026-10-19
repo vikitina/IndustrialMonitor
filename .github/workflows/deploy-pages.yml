@@ -1,0 +1,89 @@
+
+name: Deploy Avalonia Browser to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install WebAssembly tools
+        run: dotnet workload install wasm-tools
+
+      - name: Publish Avalonia Browser
+        run: dotnet publish IndustrialMonitor.Browser/IndustrialMonitor.Browser.csproj -c Release
+
+      - name: Prepare GitHub Pages files
+        shell: bash
+        run: |
+          SITE="IndustrialMonitor.Browser/bin/Release/net10.0-browser/publish/wwwroot"
+          REPO="${GITHUB_REPOSITORY#*/}"
+
+          python3 - "$SITE/index.html" "$REPO" <<'PY'
+          import sys
+          from pathlib import Path
+
+          index = Path(sys.argv[1])
+          repo = sys.argv[2]
+          html = index.read_text(encoding="utf-8")
+
+          if '<base href="/" />' in html:
+              html = html.replace(
+                  '<base href="/" />',
+                  f'<base href="/{repo}/" />'
+              )
+          elif '<base href="/">' in html:
+              html = html.replace(
+                  '<base href="/">',
+                  f'<base href="/{repo}/">'
+              )
+          else:
+              raise SystemExit("Base href not found in index.html")
+
+          index.write_text(html, encoding="utf-8")
+          PY
+
+          touch "$SITE/.nojekyll"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: IndustrialMonitor.Browser/bin/Release/net10.0-browser/publish/wwwroot
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
